@@ -1,0 +1,86 @@
+/* 
+CSS file.
+Copyright (C) 2010 Aleksi Räsänen <aleksi.rasanen@runosydan.net>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+body
+{
+	background-color:	#192E33;
+	color: white;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	width: 80%;
+}
+
+@font-face
+{
+	font-family: 'Display';
+	src: url( 'fonts/burnstown_dam.otf' );
+}
+
+@font-face
+{
+	font-family: 'Walkway';
+	src: url( 'fonts/Walkway_SemiBold.ttf' );
+}
+
+#top_logo
+{
+	margin-top: 40px;
+	font-size: 100px;
+	font-family: 'Display';
+	text-shadow: 4px 4px 4px #fff;
+}
+
+#add_form input[type=text]
+{
+	margin-top: 20px;
+	width: 300px;
+	font-size: 16px;
+	font-family: Helvetica, sans-serif;
+}
+
+#add_form input[type=submit]
+{
+	border: 2px solid black;
+	color: black;
+	font-family: Helvetica, sans-serif;
+	font-size: 13px;
+	background-color: white;
+}
+
+#given_url
+{
+	margin-left: auto;
+	margin-right: auto;
+	padding: 20px;
+	width: 500px;
+	font-size: 26px;
+	font-family: 'Helvetica', sans-serif;
+}
+
+#given_url a:link, #given_url a:visited
+{
+	font-size: 20px;
+	text-decoration: none;
+	color: yellow;
+}
+
+#given_url a:hover
+{
+	text-decoration: underline;
+	color: white;
+}
