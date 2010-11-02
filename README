@@ -1,0 +1,13 @@
+ShortURL
+
+Simple URL shortener what uses SQLite v2 Database. 
+
+This project uses external font file, so make sure that you
+download it from http://www.fontsquirrel.com/fonts/download/Burnstown-Dam
+and extract it under fonts/ folder so it will look correct. Check
+http://s.runosydan.net to see what it should look like. 
+Surely feel free to use any font you prefer.
+
+Licensed under GNU AGPL. 
+
+Author Aleksi Räsänen, aleksi.rasanen@runosydan.net
