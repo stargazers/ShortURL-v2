@@ -55,10 +55,7 @@ function db_connection_failed( $err )
 function show_mainpage( $db, $html )
 {
 	echo $html->createSiteTop( 'ShortURL', 'shorturl.css' );
-
-	echo '<div id="top_logo">';
-	echo 'ShortURL';
-	echo '</div>';
+	create_site_header( $html );
 
 	// Create form where we can add new items. We just include
 	// external HTML form here.
@@ -153,9 +150,7 @@ function show_given_shorturl( $db, $su, $html )
 {
 	echo $html->createSiteTop( 'ShortURL', 'shorturl.css' );
 
-	echo '<div id="top_logo">';
-	echo 'ShortURL';
-	echo '</div>';
+	create_site_header( $html );
 	echo '<div id="given_url">';
 	echo 'Generated URL is <a href="http://s.runosydan.net/'
 		. $su . '">http://s.runosydan.net/' . $su . '</a>';
