@@ -103,7 +103,7 @@ function create_site_footer( $html )
 
 	@param $html CHTML class instance.
 
-	@param $id ID in database where we redirect user.
+	@param $id shorturl in database where we redirect user.
 
 	@return None.
 */
@@ -115,7 +115,7 @@ function redirect_to( $db, $html, $id )
 	$url = 'index.php';
 
 	$id = $html->makeSafeForDB( $id );
-	$q = 'SELECT url FROM shorturl WHERE id=' . $id;
+	$q = 'SELECT url FROM shorturl WHERE shorturl="' . $id . '"';
 
 	try
 	{
@@ -143,14 +143,14 @@ function redirect_to( $db, $html, $id )
 
 	@param $db CSQLite database class instance.
 
-	@param $id INSERT id for this shortURL.
+	@param $su Generated ShortURL.
 
 	@param $html CHTML class instance.
 
 	@return None.
 */
 // **************************************************
-function show_given_shorturl( $db, $id, $html )
+function show_given_shorturl( $db, $su, $html )
 {
 	$html->createSiteTop( 'ShortURL', 'shorturl.css' );
 
@@ -158,8 +158,8 @@ function show_given_shorturl( $db, $id, $html )
 	echo 'ShortURL';
 	echo '</div>';
 	echo '<div id="given_url">';
-	echo 'Generated URL is <a href="http://s.runosydan.net/?id='
-		. $id . '">http://s.runosydan.net/?id=' . $id . '</a>';
+	echo 'Generated URL is <a href="http://s.runosydan.net/'
+		. $su . '">http://s.runosydan.net/' . $su . '</a>';
 	echo '<br /><br />';
 	echo '<a href="index.php">Back to mainpage</a>';
 	echo '</div>';
@@ -204,7 +204,7 @@ function open_connection()
 		if( $create_db )
 		{
 			$q = 'CREATE TABLE shorturl ( id INTEGER PRIMARY KEY, '
-				. 'url TEXT, added DATETIME );';
+				. 'url TEXT, added DATETIME, shorturl TEXT );';
 			
 			$db->query( $q );
 		}
@@ -256,10 +256,10 @@ function process_post_data( $db, $html )
 		$url = 'http://' . $url;
 
 	// Add validated URL to database.
-	$last_id = add_to_database( $db, $url );
+	$shorturl = add_to_database( $db, $url, $html );
 
 	// Show given shortURL to user too.
-	show_given_shorturl( $db, $last_id, $html );
+	show_given_shorturl( $db, $shorturl, $html );
 }
 
 // **************************************************
@@ -272,27 +272,54 @@ function process_post_data( $db, $html )
 	@param $url URL. Note! URL must be validated before
 	  you call this or the whole universe might explode!
 
+	@param $html CHTML class instance.
+
 	@return ID of last insert.
 */
 // **************************************************
-function add_to_database( $db, $url )
+function add_to_database( $db, $url, $html )
 {
-	// Create database query in variable
-	$q = 'INSERT INTO shorturl VALUES( '
-		. 'NULL, '
-		. '"' . $url . '",'
-		. '"' . date( 'Y-m-d H:i:s' ) . '" )';
+	$random_string = '';
+
+	// Generate random string what does not exists
+	// already in our database.
+	while( true )
+	{
+		$random_string = $html->createRandomString( 4 );
+
+		$q = 'SELECT id FROM shorturl WHERE shorturl="'
+			. $random_string . '"';
+
+		try
+		{
+			$ret = $db->query( $q );
+			if( $db->numRows( $ret ) == 0 )
+				break;
+		}
+		catch( Exception $e )
+		{
+			die( 'Error in query! ' . $e->getMessage() );
+		}
+	}
 
 	try
 	{
+		// Create database query in variable
+		$q = 'INSERT INTO shorturl VALUES( '
+			. 'NULL, '
+			. '"' . $url . '",'
+			. '"' . date( 'Y-m-d H:i:s' ) . '",'
+			. '"' . $random_string . '" )';
+
 		$db->query( $q );
+
 	}
 	catch( Exception $e )
 	{
 		die( 'Failed! Error was ' . $e->getMessage() );
 	}
 
-	return $db->getLastInsertID();
+	return $random_string;
 }
 
 // **************************************************

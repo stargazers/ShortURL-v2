@@ -29,6 +29,49 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // **************************************************
 class CHTML
 {
+	// **************************************************
+	//	createRandomString
+	/*!
+		@brief Generate random alphanumeric string.
+		  This can be used in password generations,
+		  shorturls and so on.
+
+		@param $len Length of string to generate
+
+		@return Random alpahnumeric string.
+	*/
+	// **************************************************
+    function createRandomString( $len )
+    {   
+        // Characters what can be in random string
+        $ok_val = array();
+
+        // Add number 0-9 
+        for( $i=0; $i<10; $i++ )
+            $ok_val[] = $i; 
+
+        // Add characters A to Z
+        for( $i=65; $i<91; $i++ )
+            $ok_val[] = chr( $i );
+
+        // Add characters a to z
+        for( $i=97; $i<123; $i++ )
+            $ok_val[] = chr( $i );
+
+        $text = ''; 
+
+		// Count size of array $ok_val before
+		// for-loop, because we do not want to
+		// count it every time because it cannot
+		// change on the fly. Optimizations ftw! ;)
+        $max = count( $ok_val );
+
+		// Create correct lenght random string
+        for( $c=0; $c<$len; $c++ )
+            $text .= $ok_val[mt_rand( 0, $max )]; 
+    
+        return $text;
+    }  
 	
 	// **************************************************
 	//	makeSafeForDB
