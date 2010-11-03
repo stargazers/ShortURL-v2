@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'CSQLite/CSQLite.php';
 require 'CHTML/CHTML.php';
+require 'general_functions.php';
 
 // **************************************************
 //	db_connection_failed
@@ -53,7 +54,7 @@ function db_connection_failed( $err )
 // **************************************************
 function show_mainpage( $db, $html )
 {
-	$html->createSiteTop( 'ShortURL', 'shorturl.css' );
+	echo $html->createSiteTop( 'ShortURL', 'shorturl.css' );
 
 	echo '<div id="top_logo">';
 	echo 'ShortURL';
@@ -64,32 +65,7 @@ function show_mainpage( $db, $html )
 	require 'html/form_add_new.html';
 
 	create_site_footer( $html );
-	$html->createSiteBottom();
-}
-
-// **************************************************
-//	create_site_footer
-/*!
-	@brief Create footer for site.
-
-	@param $html
-
-	@return None.
-*/
-// **************************************************
-function create_site_footer( $html )
-{
-	echo '<div id="footer">';
-	echo 'Licensed under GNU AGPL, sources available in ';
-	$html->createLink( 'https://github.com/stargazers/ShortURL-v2',
-		'GitHub', true );
-
-	echo  '. (c) ';
-	$html->createLink( 'mailto:aleksi.rasanen@runosydan.net',
-		'Aleksi Räsnen' );
-
-	echo ' 2010.';
-	echo '</div>';
+	echo $html->createSiteBottom();
 }
 
 // **************************************************
@@ -186,7 +162,7 @@ function redirect_to( $db, $html, $id )
 // **************************************************
 function show_given_shorturl( $db, $su, $html )
 {
-	$html->createSiteTop( 'ShortURL', 'shorturl.css' );
+	echo $html->createSiteTop( 'ShortURL', 'shorturl.css' );
 
 	echo '<div id="top_logo">';
 	echo 'ShortURL';
@@ -199,7 +175,7 @@ function show_given_shorturl( $db, $su, $html )
 	echo '</div>';
 
 	create_site_footer( $html );
-	$html->createSiteBottom();
+	echo $html->createSiteBottom();
 	die();
 }
 

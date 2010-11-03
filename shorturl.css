@@ -45,6 +45,12 @@ body
 	text-shadow: 4px 4px 4px #fff;
 }
 
+#top_logo a:visited, #top_logo a:link
+{
+	text-decoration: none;
+	color: white;
+}
+
 #add_form input[type=text]
 {
 	margin-top: 20px;
@@ -107,4 +113,33 @@ body
 {
 	color: white;
 	text-decoration: underline;
+}
+
+#stats
+{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+}
+
+#stats table
+{
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: 'Helvetica';
+}
+
+.odd
+{
+	background-color: #cffaff;
+	color: black;
+	padding: 4px;
+}
+
+.even
+{
+	background-color: #ffaffc;
+	color: black;
+	padding: 4px;
 }

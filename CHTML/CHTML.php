@@ -103,38 +103,40 @@ class CHTML
 		  file prefix too! If this is array, then we add all
 		  array items as a CSS file!
 
-		@return None.
+		@return Generated HTML in string.
 	*/
 	// **************************************************
 	public function createSiteTop( $title = '', $css = '' )
 	{
-		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 '
+		$out = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 '
 			. 'Transitional//EN" '
 			. '"http://www.w3.org/TR/html4/loose.dtd">';
 
-		echo '<html>';
-		echo '<head>';
+		$out .= '<html>';
+		$out .= '<head>';
 
-		echo '<title>' . $title . '</title>';
-		echo '<meta http-equiv="Content-Type" '
+		$out .= '<title>' . $title . '</title>';
+		$out .= '<meta http-equiv="Content-Type" '
 			. 'content="text/xhtml;charset=utf-8">';
 
 		if(! is_array( $css ) )
 		{
-			echo '<link rel="stylesheet" type="text/css" '
+			$out .= '<link rel="stylesheet" type="text/css" '
 				. 'href="' . $css . '">';
 		}
 		else
 		{
 			foreach( $css as $val )
 			{
-				echo '<link rel="stylesheet" type="text/css" '
+				$out .= '<link rel="stylesheet" type="text/css" '
 					. 'href="' . $val . '">';
 			}
 		}
-		echo '</head>';
 
-		echo '<body>';
+		$out .= '</head>';
+		$out .= '<body>';
+
+		return $out;
 	}
 
 	// **************************************************
@@ -167,12 +169,73 @@ class CHTML
 	// **************************************************
 	public function createLink( $url, $text, $nw=false )
 	{
-		echo '<a href="' . $url . '"';
+		$out = '<a href="' . $url . '"';
 			
 		if( $nw )
-			echo ' target="_new"';
+			$out .= ' target="_new"';
 
-		echo '>' . $text . '</a>';
+		$out .= '>' . $text . '</a>';
+		return $out;
+	}
+
+	// **************************************************
+	//	dtToFinnish
+	/*!
+		@brief Convert YYYY-MM-DD H:i:s to finnish
+		  way, eg. Date.Month.Year H:i:s
+
+		@param $dt Datetime
+
+		@return Finnish datetime format.
+	*/
+	// **************************************************
+	public function dtToFinnish( $dt )
+	{
+		return date( 'd.m.Y H:i:s', strtotime( $dt ) );
+	}
+
+
+	// **************************************************
+	//	createTable
+	/*!
+		@brief Create HTML table and add rows CSS class
+		  'odd' and 'even'.
+
+		@param $values Array of values.
+
+		@return Generated HTML in string.
+	*/
+	// **************************************************
+	public function createTable( $values )
+	{
+		$out = '<table>';
+		$tmp = 0;
+
+		foreach( $values as $val )
+		{
+			if( $tmp == 2 )
+				$tmp = 0;
+
+			if( $tmp == 0 )
+				$out .= '<tr class="odd">';
+			else
+				$out .= '<tr class="even">';
+
+			$num_vals = count( $val );
+			for( $i=0; $i < $num_vals; $i++ )
+			{
+				$out .= '<td>';
+				$out .= $val[$i];
+				$out .= '</td>';
+			}
+
+			$out .= '</tr>';
+			$tmp++;
+
+		}
+
+		$out .= '</table>';
+		return $out;
 	}
 
 }
