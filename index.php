@@ -304,6 +304,46 @@ function process_post_data( $db, $html )
 }
 
 // **************************************************
+//	get_shorturl_by_url
+/*!
+	@brief Get shortened URL from database by full URL.
+	  This will be used when we need to check if URL
+	  has already added to database.
+	
+	@param $db CSQLite database class instance.
+
+	@param $html CHTML class instance.
+
+	@param $url Full URL with or without http:// in 
+	  beginning of it.
+	
+	@return String what is longer than 0 if there already
+	  was shorturl to given URL. Empty string if this
+	  URL had no already shortened URL.
+*/
+// **************************************************
+function get_shorturl_by_url( $db, $html, $url )
+{
+	// Make sure that there is no ' and "
+	$url = $html->makeSafeForDB( $_POST['url'] );
+
+	// Make sure that we have http:// in the beginning
+	if( substr( $url, 0, 4 ) != 'http' )
+		$url = 'http://' . $url;
+
+	$q = 'SELECT shorturl FROM shorturl WHERE url="' . $url . '"';
+	
+	$ret = $db->queryAndAssoc( $q );
+
+	// There was already shorturl for this URL. Return that.
+	if( isset( $ret[0]['shorturl'] ) )
+		return $ret[0]['shorturl'];
+	
+	// No existing shorturl found.
+	return '';
+}
+
+// **************************************************
 //	add_to_database
 /*!
 	@brief Adds given URL to the database.
@@ -320,6 +360,14 @@ function process_post_data( $db, $html )
 // **************************************************
 function add_to_database( $db, $url, $html )
 {
+	// Check if there is already shorturl for given URL.
+	$old_shorturl = get_shorturl_by_url( $db, $html, $url );
+
+	// If $old_shorturl is longer string than 0, then we
+	// have already shortened this URL. Return it.
+	if( strlen( $old_shorturl ) > 0 )
+		return $old_shorturl;
+
 	$random_string = '';
 
 	// Generate random string what does not exists

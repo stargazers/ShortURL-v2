@@ -177,6 +177,43 @@ class CSQLite
 			$this->connected = false;
 		}
 	}
+
+	// *******************************************
+	//	queryAndAssoc
+	//
+	//	@brief Create SQL query and try to fetch
+	//    results to array.
+	//
+	//	@param $q Query to run. Note! Make sure that
+	//	  you have removed illegal characters, this
+	//	  function does NOT do it for you!
+	//
+	//	@return Array of values if there were any
+	//	  rows found what to fetch. If there were
+	//	  no rows found with query, then return -1.
+	//	  If query failed, return -2. Then it is
+	//	  better to use normal query instead of
+	//	  this for debug, this is useful only when
+	//	  you have already made sure that your queries
+	//	  will not fail.
+	//
+	// *******************************************
+	public function queryAndAssoc( $q )
+	{
+		try
+		{
+			$ret = $this->query( $q );
+
+			if( $this->numRows( $ret ) > 0 )
+				return $this->fetchAssoc( $ret );
+
+			return -1;
+		}
+		catch( Exception $e )
+		{
+			return -2;
+		}
+	}
 }
 
 ?>
