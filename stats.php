@@ -46,6 +46,7 @@
 
 		echo '<div id="stats">';
 		echo $html->createTable( $values );
+		echo $html->createLink( 'index.php', 'Back to main page' );
 		echo '</div>';
 
 		create_site_footer( $html );

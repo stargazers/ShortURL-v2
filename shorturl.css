@@ -122,11 +122,24 @@ body
 	margin-top: 20px;
 }
 
+#stats a:link, #stats a:visited
+{
+	color: yellow;
+	text-decoration: none;
+}
+
+#stats a:hover
+{
+	color: white;
+	text-decoration: underline;
+}
+
 #stats table
 {
 	width: 500px;
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 20px;
 	font-family: 'Helvetica';
 }
 
