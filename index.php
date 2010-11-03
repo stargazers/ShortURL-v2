@@ -63,7 +63,33 @@ function show_mainpage( $db, $html )
 	// external HTML form here.
 	require 'html/form_add_new.html';
 
+	create_site_footer( $html );
 	$html->createSiteBottom();
+}
+
+// **************************************************
+//	create_site_footer
+/*!
+	@brief Create footer for site.
+
+	@param $html
+
+	@return None.
+*/
+// **************************************************
+function create_site_footer( $html )
+{
+	echo '<div id="footer">';
+	echo 'Licensed under GNU AGPL, sources available in ';
+	$html->createLink( 'https://github.com/stargazers/ShortURL-v2',
+		'GitHub', true );
+
+	echo  '. (c) ';
+	$html->createLink( 'mailto:aleksi.rasanen@runosydan.net',
+		'Aleksi Räsnen' );
+
+	echo ' 2010.';
+	echo '</div>';
 }
 
 // **************************************************
@@ -138,6 +164,7 @@ function show_given_shorturl( $db, $id, $html )
 	echo '<a href="index.php">Back to mainpage</a>';
 	echo '</div>';
 
+	create_site_footer( $html );
 	$html->createSiteBottom();
 	die();
 }

@@ -22,7 +22,7 @@ body
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
-	width: 80%;
+	width: 90%;
 }
 
 @font-face
@@ -41,7 +41,7 @@ body
 {
 	margin-top: 40px;
 	font-size: 100px;
-	font-family: 'Display';
+	font-family: 'Display', 'Helvetica', sans-serif;
 	text-shadow: 4px 4px 4px #fff;
 }
 
@@ -83,4 +83,28 @@ body
 {
 	text-decoration: underline;
 	color: white;
+}
+
+#footer
+{
+	font-family: 'Helvetica', sans-serif;
+	font-size: 12px;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+	padding-bottom: 5px;
+	height: 15px;
+}
+
+#footer a:link, #footer a:visited
+{
+	color: yellow;
+	text-decoration: none;
+}
+
+#footer a:hover
+{
+	color: white;
+	text-decoration: underline;
 }

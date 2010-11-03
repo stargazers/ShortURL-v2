@@ -108,6 +108,30 @@ class CHTML
 		echo '</html>';
 	}
 
+	// **************************************************
+	//	createLink
+	/*!
+		@brief Create normal <a href="">URL</a> block.
+
+		@param $url URL inside href part.
+
+		@param $text Text to show in link.
+
+		@param $nw Open in new window? Default false.
+
+		@return $none;
+	*/
+	// **************************************************
+	public function createLink( $url, $text, $nw=false )
+	{
+		echo '<a href="' . $url . '"';
+			
+		if( $nw )
+			echo ' target="_new"';
+
+		echo '>' . $text . '</a>';
+	}
+
 }
 
 ?>
