@@ -93,6 +93,35 @@ function create_site_footer( $html )
 }
 
 // **************************************************
+//	add_to_stats
+/*!
+	@brief Add information about URL usage to stats table.
+
+	@param $db CSQLite database class instance.
+
+	@param $url Shortened URL where we are going.
+
+	@return None.
+*/
+// **************************************************
+function add_to_stats( $db, $url )
+{
+	$q = 'INSERT INTO stats VALUES( NULL, ' 
+		. '"' . $url . '",'
+		. '"' . date( 'Y-m-d H:i:s' ) . '" )';
+
+	try
+	{
+		$db->query( $q );
+	}
+	catch( Exception $e )
+	{
+		echo 'Error in stats query! ' . $e->getMessage();
+		die();
+	}
+}
+
+// **************************************************
 //	redirect_to
 /*!
 	@brief Redirect user to given ID if ID exists
@@ -131,6 +160,11 @@ function redirect_to( $db, $html, $id )
 	{
 		die( 'Failed! Error was: ' . $e->getMessage() );
 	}
+
+	// If we are going on the other URL than our mainpage,
+	// then we want to collect some stats about URL usage.
+	if( $url != 'index.php' )
+		add_to_stats( $db, $id );
 
 	header( 'Location: ' . $url );
 }
@@ -203,9 +237,16 @@ function open_connection()
 		// also a table for it.
 		if( $create_db )
 		{
+			// Table for shorturls
 			$q = 'CREATE TABLE shorturl ( id INTEGER PRIMARY KEY, '
 				. 'url TEXT, added DATETIME, shorturl TEXT );';
 			
+			$db->query( $q );
+	
+			// Table for stats
+			$q = 'CREATE TABLE stats ( id INTEGER PRIMARY KEY, '
+				. 'shorturl TEXT, visited DATETIME );';
+
 			$db->query( $q );
 		}
 	}
