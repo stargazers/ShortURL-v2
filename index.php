@@ -145,21 +145,10 @@ function redirect_to( $db, $html, $id )
 
 	$id = $html->makeSafeForDB( $id );
 	$q = 'SELECT url FROM shorturl WHERE shorturl="' . $id . '"';
+	$ret = $db->queryAndAssoc( $q );
 
-	try
-	{
-		$ret = $db->query( $q );
-
-		if( $db->numRows( $ret ) > 0 )
-		{
-			$ret = $db->fetchAssoc( $ret );
-			$url = $ret[0]['url'];
-		}
-	}
-	catch( Exception $e )
-	{
-		die( 'Failed! Error was: ' . $e->getMessage() );
-	}
+	if( isset( $ret[0]['url'] ) )
+		$url = $ret[0]['url'];
 
 	// If we are going on the other URL than our mainpage,
 	// then we want to collect some stats about URL usage.
@@ -332,7 +321,6 @@ function get_shorturl_by_url( $db, $html, $url )
 		$url = 'http://' . $url;
 
 	$q = 'SELECT shorturl FROM shorturl WHERE url="' . $url . '"';
-	
 	$ret = $db->queryAndAssoc( $q );
 
 	// There was already shorturl for this URL. Return that.
@@ -368,27 +356,18 @@ function add_to_database( $db, $url, $html )
 	if( strlen( $old_shorturl ) > 0 )
 		return $old_shorturl;
 
-	$random_string = '';
+	$rand_str = '';
 
 	// Generate random string what does not exists
 	// already in our database.
 	while( true )
 	{
-		$random_string = $html->createRandomString( 4 );
+		$rand_str = $html->createRandomString( 4 );
+		$q = 'SELECT id FROM shorturl WHERE shorturl="' . $rand_str . '"';
 
-		$q = 'SELECT id FROM shorturl WHERE shorturl="'
-			. $random_string . '"';
-
-		try
-		{
-			$ret = $db->query( $q );
-			if( $db->numRows( $ret ) == 0 )
-				break;
-		}
-		catch( Exception $e )
-		{
-			die( 'Error in query! ' . $e->getMessage() );
-		}
+		// If there is no rows found, then we can break this loop.
+		if( $db->queryAndAssoc( $q ) == -1 )
+			break;
 	}
 
 	try
@@ -398,7 +377,7 @@ function add_to_database( $db, $url, $html )
 			. 'NULL, '
 			. '"' . $url . '",'
 			. '"' . date( 'Y-m-d H:i:s' ) . '",'
-			. '"' . $random_string . '" )';
+			. '"' . $rand_str . '" )';
 
 		$db->query( $q );
 
@@ -408,7 +387,7 @@ function add_to_database( $db, $url, $html )
 		die( 'Failed! Error was ' . $e->getMessage() );
 	}
 
-	return $random_string;
+	return $rand_str;
 }
 
 // **************************************************
