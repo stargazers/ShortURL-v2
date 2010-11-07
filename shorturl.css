@@ -25,23 +25,22 @@ body
 	width: 90%;
 }
 
-@font-face
+@font-face 
 {
-	font-family: 'Display';
-	src: url( 'fonts/burnstown_dam.otf' );
-}
-
-@font-face
-{
-	font-family: 'Walkway';
-	src: url( 'fonts/Walkway_SemiBold.ttf' );
+	font-family: 'Burnstown_dam';
+    src: url( 'http://stargazers.nor.fi/fonts/burnstown_dam/burnstown_dam-webfont.eot' );
+	src: local('☺'), 
+	     url( 'http://stargazers.nor.fi/fonts/burnstown_dam/burnstown_dam-webfont.woff' ) 
+		 	format('woff'), 
+		 url( 'http://stargazers.nor.fi/fonts/burnstown_dam/burnstown_dam-webfont.ttf' ) 
+		 	format('truetype');
 }
 
 #top_logo
 {
 	margin-top: 40px;
 	font-size: 100px;
-	font-family: 'Display', 'Helvetica', sans-serif;
+	font-family: 'Burnstown_dam', 'Helvetica', sans-serif;
 	text-shadow: 4px 4px 4px #fff;
 }
 

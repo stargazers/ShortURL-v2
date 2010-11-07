@@ -144,13 +144,14 @@ class CHTML
 	/*!
 		@brief Create site end, eg. </body> and </html>
 
-		@return None.
+		@return String where we have generated HTNL.
 	*/
 	// **************************************************
 	public function createSiteBottom()
 	{
-		echo '</body>';
-		echo '</html>';
+		$out = '</body>';
+		$out .= '</html>';
+		return $out;
 	}
 
 	// **************************************************
