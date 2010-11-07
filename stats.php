@@ -1,5 +1,23 @@
 <?php
 	
+/* 
+Stats. Part of ShortURL.
+Copyright (C) 2010 Aleksi Räsänen <aleksi.rasanen@runosydan.net>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 	require 'CSQLite/CSQLite.php';
 	require 'CHTML/CHTML.php';
 	require 'general_functions.php';
@@ -44,11 +62,34 @@
 		$values[] = array( 'Most clicked URL has been clicked',
 			$ret[0]['clicks'] . ' times' );
 
+		// Get daily stats.
+		$q = 'SELECT strftime( "%d-%m-%Y", visited ) AS day, '
+			. 'COUNT(*) AS visits FROM stats GROUP BY '
+			. 'strftime( "%d-%m-%Y", visited ) ORDER BY visited DESC;';
+		$ret = $db->queryAndAssoc( $q );
+		$max = count( $ret );
+
+		// Add daily stats to array $daily_stats
+		for( $i=0; $i < $max; $i++ )
+		{
+			$d = date( 'd.m.Y', strtotime( $ret[$i]['day'] ) );
+			$v = $ret[$i]['visits'] . ' links opened';
+
+			$daily_stats[] = array( $d, $v );
+		}
+
+		// Show general stats
+		echo '<h3>General stats</h3>';
 		echo '<div id="stats">';
 		echo $html->createTable( $values );
-		echo $html->createLink( 'index.php', 'Back to main page' );
 		echo '</div>';
 
+		// Show daily stats
+		echo '<h3>Daily stats</h3>';
+		echo '<div id="stats">';
+		echo $html->createTable( $daily_stats );
+		echo $html->createLink( 'index.php', 'Back to main page' );
+		echo '</div>';
 		create_site_footer( $html );
 		echo $html->createSiteBottom();
 	}
