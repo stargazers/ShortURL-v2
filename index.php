@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 require 'CSQLite/CSQLite.php';
+require 'CGeneral/CGeneral.php';
 require 'CHTML/CHTML.php';
 require 'general_functions.php';
 
@@ -54,7 +55,9 @@ function db_connection_failed( $err )
 // **************************************************
 function show_mainpage( $db, $html )
 {
-	echo $html->createSiteTop( 'ShortURL', 'shorturl.css' );
+	$html->setCSS( 'shorturl.css' );
+	echo $html->createSiteTop( 'ShortURL' );
+
 	create_site_header( $html );
 
 	// Create form where we can add new items. We just include
@@ -116,7 +119,7 @@ function redirect_to( $db, $html, $id )
 	// still redirect user to $url
 	$url = 'index.php';
 
-	$id = $html->makeSafeForDB( $id );
+	$id = $db->makeSafeForDB( $id );
 	$q = 'SELECT url FROM shorturl WHERE shorturl="' . $id . '"';
 	$ret = $db->queryAndAssoc( $q );
 
@@ -148,7 +151,8 @@ function redirect_to( $db, $html, $id )
 // **************************************************
 function show_given_shorturl( $db, $su, $html )
 {
-	echo $html->createSiteTop( 'ShortURL', 'shorturl.css' );
+	$html->setCSS( 'shorturl.css' );
+	echo $html->createSiteTop( 'ShortURL' );
 
 	create_site_header( $html );
 	echo '<div id="given_url">';
@@ -241,7 +245,7 @@ function process_post_data( $db, $html )
 
 	// First remove ', " and others what can explode
 	// the whole universe or at least our database :)
-	$url = $html->makeSafeForDB( $_POST['url'] );
+	$url = $db->makeSafeForDB( $_POST['url'] );
 
 	// Do not add empty lines.
 	if( strlen( trim( $url ) ) == 0 )
@@ -285,7 +289,7 @@ function process_post_data( $db, $html )
 function get_shorturl_by_url( $db, $html, $url )
 {
 	// Make sure that there is no ' and "
-	$url = $html->makeSafeForDB( $_POST['url'] );
+	$url = $db->makeSafeForDB( $_POST['url'] );
 
 	// Make sure that we have http:// in the beginning
 	if( substr( $url, 0, 4 ) != 'http' )
@@ -319,6 +323,8 @@ function get_shorturl_by_url( $db, $html, $url )
 // **************************************************
 function add_to_database( $db, $url, $html )
 {
+	$gen = new CGeneral();
+
 	// Check if there is already shorturl for given URL.
 	$old_shorturl = get_shorturl_by_url( $db, $html, $url );
 
@@ -333,7 +339,7 @@ function add_to_database( $db, $url, $html )
 	// already in our database.
 	while( true )
 	{
-		$rand_str = $html->createRandomString( 4 );
+		$rand_str = $gen->createRandomString( 4 );
 		$q = 'SELECT id FROM shorturl WHERE shorturl="' . $rand_str . '"';
 
 		// If there is no rows found, then we can break this loop.

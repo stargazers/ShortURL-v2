@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	require 'CSQLite/CSQLite.php';
 	require 'CHTML/CHTML.php';
+	require 'CGeneral/CGeneral.php';
 	require 'general_functions.php';
 
 	// **************************************************
@@ -32,9 +33,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	{
 		$html = new CHTML();
 		$db = new CSQLite();
+		$gen = new CGeneral();
+
 		$db->connect( 'shorturl.db' );
 
-		echo $html->createSiteTop( 'Statistics', 'shorturl.css' );
+		$html->setCSS( 'shorturl.css' );
+		echo $html->createSiteTop( 'Statistics' );
 		create_site_header( $html );
 
 		$q = 'SELECT * FROM shorturl';
@@ -44,10 +48,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		$values[] = array( 'ShortURLs in database', count( $ret ) );
 
 		$values[] = array( 'First ShortURL is added', 
-			$html->dtToFinnish( $ret[0]['added'] ) );
+			$gen->datetimeToFinnish( $ret[0]['added'] ) );
 
 		$values[] = array( 'Last ShortURL is added', 
-			$html->dtToFinnish( $ret[count($ret)-1]['added'] ) );
+			$gen->datetimeToFinnish( $ret[count($ret)-1]['added'] ) );
 
 		// Get info about clicks
 		$q = 'SELECT * FROM stats';
@@ -72,7 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		// Add daily stats to array $daily_stats
 		for( $i=0; $i < $max; $i++ )
 		{
-			$d = date( 'd.m.Y', strtotime( $ret[$i]['day'] ) );
+			$d = $gen->dateToFinnish( $ret[$i]['day'] );
 			$v = $ret[$i]['visits'] . ' links opened';
 
 			$daily_stats[] = array( $d, $v );
@@ -80,13 +84,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 		// Show general stats
 		echo '<h3>General stats</h3>';
-		echo '<div id="stats">';
+		echo '<div class="stats">';
 		echo $html->createTable( $values );
 		echo '</div>';
 
 		// Show daily stats
 		echo '<h3>Daily stats</h3>';
-		echo '<div id="stats">';
+		echo '<div class="stats">';
 		echo $html->createTable( $daily_stats );
 		echo $html->createLink( 'index.php', 'Back to main page' );
 		echo '</div>';
