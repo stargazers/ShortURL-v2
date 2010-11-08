@@ -1,3 +1,8 @@
 RewriteEngine On
 RewriteBase /shorturl
 RewriteRule ^([A-Za-z0-9]+)$ index.php?id=$1
+
+<Files bookmarks.db>
+	order allow,deny
+	deny from all
+</Files>
