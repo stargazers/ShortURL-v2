@@ -66,10 +66,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		$values[] = array( 'Most clicked URL has been clicked',
 			$ret[0]['clicks'] . ' times' );
 
-		// Get daily stats.
+		// Get daily stats. Only 7 newest days.
 		$q = 'SELECT strftime( "%d-%m-%Y", visited ) AS day, '
 			. 'COUNT(*) AS visits FROM stats GROUP BY '
-			. 'strftime( "%d-%m-%Y", visited ) ORDER BY visited DESC;';
+			. 'strftime( "%d-%m-%Y", visited ) ORDER BY visited '
+			. 'DESC LIMIT 7;';
 		$ret = $db->queryAndAssoc( $q );
 		$max = count( $ret );
 
